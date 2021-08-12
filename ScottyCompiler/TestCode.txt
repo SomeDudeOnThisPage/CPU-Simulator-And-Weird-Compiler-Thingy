@@ -1,0 +1,2 @@
+﻿boolean z = false;
+int f = z + 1;

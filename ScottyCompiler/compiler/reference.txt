@@ -1,0 +1,27 @@
+﻿// int x = 1;
+// int y = 2;
+// int z = x + y;
+//
+// x = z + 27;
+// boolean w = x > y;
+// int f = x + (1 + 3); f = f + 1;
+
+program         := statement (; statement)
+
+type            := 'int' | 'boolean'
+
+statement       := var-declaration | var-assignment
+
+var-name        := type ID
+var-declaration := var-name var-assign ';'
+var-assignment  := ID var-assign ';'
+var-assign      := '=' expression
+
+expression      := or
+or              := and ('||' and)*
+and             := not ('&&' not)*
+not             := '!'? compare
+compare         := add-sub (('>' | '<' | '>=' | '<=' | '==' | '!=') add-sub)*
+add-sub         := negate (('+' | '-') negate)*
+negate          := '-'? atom
+atom            := ID | INT | BOOL | '(' expression ')'
