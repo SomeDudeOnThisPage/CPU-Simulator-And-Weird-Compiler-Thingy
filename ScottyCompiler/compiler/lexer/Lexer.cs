@@ -10,44 +10,58 @@ using System.IO;
  * Separator ::= EOL | ' '
  * Digit ::= a number lmao
  */
-namespace Scotty.compiler.lexer {
-  public class Lexer : StringReader {
+namespace Scotty.compiler.lexer
+{
+  public class Lexer : StringReader
+  {
     private char _current;
     private string _spelling;
     private bool _finished;
 
     private int _line;
     private int _position;
-    
-    private bool IsLetter(char character) {
+
+    private bool IsLetter(char character)
+    {
       return character is >= 'a' and <= 'z';
     }
 
-    private bool IsDigit(char character) {
+    private bool IsDigit(char character)
+    {
       return character is >= '0' and <= '9';
     }
-    
-    private TokenType ScanToken() {
+
+    private TokenType ScanToken()
+    {
       // parse letters
-      if (this.IsLetter(this._current)) {
+      if (this.IsLetter(this._current))
+      {
         this.Take();
-        while (this.IsLetter(this._current) || this.IsDigit(this._current)) {
-           this.Take();
+        while (this.IsLetter(this._current) || this.IsDigit(this._current))
+        {
+          this.Take();
         }
+
         return TokenType.IDENTIFIER;
       }
 
-      if (this.IsDigit(this._current)) {
+      if (this.IsDigit(this._current))
+      {
         this.Take();
-        while (this.IsDigit(this._current)) {
+        while (this.IsDigit(this._current))
+        {
           this.Take();
         }
 
         return TokenType.LITERAL;
       }
 
-      switch (this._current) {
-        case '+': case '-': case '<': case '>':
+      switch (this._current)
+      {
+        case '+':
+        case '-':
+        case '<':
+        case '>':
           this.Take();
           return TokenType.OPERATOR;
         case '=':
@@ -72,18 +86,24 @@ namespace Scotty.compiler.lexer {
       throw new InvalidOperationException("unknown token " + this._current);
     }
 
-    private void Take() {
+    private void Take()
+    {
       this._spelling += this._current;
       this._current = (char) this.Read();
     }
 
-    private char ScanSeparator() {
+    private char ScanSeparator()
+    {
       var character = (char) this.Read();
-      while (character is ' ' or '\n' or '\r') {
-        if (character == '\n') {
+      while (character is ' ' or '\n' or '\r')
+      {
+        if (character == '\n')
+        {
           this._line++;
           this._position = 0;
-        } else {
+        }
+        else
+        {
           this._position++;
         }
 
@@ -93,23 +113,30 @@ namespace Scotty.compiler.lexer {
       return character;
     }
 
-    public bool IsFinished() {
+    public bool IsFinished()
+    {
       return this._finished;
     }
-    
-    public Token Scan() {
-      if (this._current == ' ' || this._current == '\n' || this._current == '\r') {
-        if (this._current == '\n') {
+
+    public Token Scan()
+    {
+      if (this._current == ' ' || this._current == '\n' || this._current == '\r')
+      {
+        if (this._current == '\n')
+        {
           this._line++;
           this._position = 0;
-        } else {
+        }
+        else
+        {
           this._position++;
         }
-        
+
         this._current = this.ScanSeparator();
       }
 
-      if (this.Peek() == -1) {
+      if (this.Peek() == -1)
+      {
         this._finished = true;
         return new Token(TokenType.EOF, this._spelling, 0);
       }
@@ -119,9 +146,10 @@ namespace Scotty.compiler.lexer {
       token.SetPosition(this._line, this._position);
       return token;
     }
-    
 
-    public Lexer(string s) : base(s) {
+
+    public Lexer(string s) : base(s)
+    {
       this._current = '\n';
       this._spelling = "";
       this._finished = false;

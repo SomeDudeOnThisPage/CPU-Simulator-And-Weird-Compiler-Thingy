@@ -1,8 +1,11 @@
 ﻿using Scotty.core;
 
-namespace Scotty.scotty.instructions {
-  public struct And : IInstruction<ScottStackProcessor> {
-    public void execute(ScottStackProcessor cpu, params byte[] arguments) {
+namespace Scotty.scotty.instructions
+{
+  public struct And : IInstruction<ScottStackProcessor>
+  {
+    public void execute(ScottStackProcessor cpu, params byte[] arguments)
+    {
       ushort s0 = cpu.Pop();
       ushort s1 = cpu.Pop();
 
